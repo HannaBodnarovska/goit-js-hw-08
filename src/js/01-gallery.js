@@ -25,6 +25,8 @@ const galleryMarkup = galleryItems
 
 gallery.innerHTML = galleryMarkup;
 
+const instance = new SimpleLightbox('.gallery a', {});
+
 gallery.addEventListener('click', (event) => {
   event.preventDefault();
 
@@ -36,7 +38,10 @@ gallery.addEventListener('click', (event) => {
 
   const { dataset: { source, alt } } = target;
 
-  const instance = new SimpleLightbox('.gallery a', {});
+  if (instance.isOpen()) {
+    instance.close();
+    return;
+  }
 
   const escapeKeyPushHandler = (event) => {
     if (event.code === 'Escape') {
@@ -46,8 +51,7 @@ gallery.addEventListener('click', (event) => {
   };
 
   document.addEventListener('keydown', escapeKeyPushHandler);
-  instance.show();
+  instance.show({ items: [{ src: source, description: alt }] }); // Proper format for items
 });
-
 
 console.log(galleryItems);
